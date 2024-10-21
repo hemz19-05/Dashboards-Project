@@ -46,7 +46,8 @@ app.layout = html.Div(children=[
         dcc.Dropdown(
             id='select-year',
             options=[{'label': i, 'value': i} for i in year_list],
-            value='Select-year'
+            value='Select-year',
+	    placeholder='Select-year'
         )),
         html.Div([#TASK 2.3: Add a division for output display
         html.Div(id='output-container', className='chart-grid', style={'display':'flex'}),])
