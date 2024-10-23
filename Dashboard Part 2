@@ -35,7 +35,10 @@ app.layout = html.Div([
             html.Label("Select Statistics:"),
             dcc.Dropdown(
                 id='dropdown-statistics',
-                options=dropdown_options,
+                options=[
+                           {'label': 'Yearly Statistics', 'value': 'Yearly Statistics'},
+                           {'label': 'Recession Period Statistics', 'value': 'Recession Period Statistics'}
+                           ],
 		placeholder='Select a report type',
                 value='Select Statistics',
 		style={'text-align-last':'center', 'width':'80%', 'font-size':'20px', 'padding':'30px'} 
@@ -44,7 +47,7 @@ app.layout = html.Div([
         html.Div(dcc.Dropdown(
                 id='select-year',
                 options=[{'label': i, 'value': i} for i in year_list],
-		placeholder='Select year',
+		placeholder='Select-year',
                 value='Select-year',
 		style={'text-align-last':'center', 'width':'80%', 'font-size':'20px', 'padding':'30px'}
             )),
@@ -102,7 +105,7 @@ def update_output_container(selected_statistics, input_year):
 # Plot 3 Pie chart for total expenditure share by vehicle type during recessions
         # grouping data for plotting
 	# Hint:Use Vehicle_Type and Advertising_Expenditure columns
-        exp_rec= recession_data.groupby('Vehicle_Type')['Advertising_Expenditure'].sum()
+        exp_rec= recession_data.groupby('Vehicle_Type')['Advertising_Expenditure'].sum().reset_index()
         R_chart3 = dcc.Graph(
             figure=px.pie(exp_rec,
             values='Advertising_Expenditure',
@@ -137,7 +140,7 @@ def update_output_container(selected_statistics, input_year):
 #plot 1 Yearly Automobile sales using line chart for the whole period.
         # grouping data for plotting.
         # Hint:Use the columns Year and Automobile_Sales.
-        yas= data.groupby('Year')['Automobile_Sales'].sum()
+        yas= data.groupby('Year')['Automobile_Sales'].mean().reset_index()
         Y_chart1 = dcc.Graph(
             figure=px.line(yas,
             x='Year',
@@ -147,7 +150,7 @@ def update_output_container(selected_statistics, input_year):
 # Plot 2 Total Monthly Automobile sales using line chart.
         # grouping data for plotting.
 	# Hint:Use the columns Month and Automobile_Sales.
-        mas=data.groupby('Month')['Automobile_Sales'].sum()
+        mas=data.groupby('Month')['Automobile_Sales'].mean().reset_index()
         Y_chart2 = dcc.Graph(
             figure=px.line(mas,
             x='Month',
@@ -167,12 +170,12 @@ def update_output_container(selected_statistics, input_year):
     # Total Advertisement Expenditure for each vehicle using pie chart
          # grouping data for plotting.
          # Hint:Use the columns Vehicle_Type and Advertising_Expenditure
-        exp_data=yearly_data.groupby('Vehicle_Type')['Advertising_Expenditure'].sum()
+        exp_data=yearly_data.groupby('Vehicle_Type')['Advertising_Expenditure'].sum().reset_index()
         Y_chart4 = dcc.Graph(
             figure=px.pie(exp_data,
             values='Advertising_Expenditure',
             names='Vehicle_Type',
-            title='Total Advertisement Expenditure by Vehicle'))
+            title='Total Advertisement Expenditure by Vehicle in the year {}.format(input_year)'))
 
 #TASK 2.6: Returning the graphs for displaying Yearly data
         return [
