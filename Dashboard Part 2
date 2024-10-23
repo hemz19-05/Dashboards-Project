@@ -36,6 +36,7 @@ app.layout = html.Div([
             dcc.Dropdown(
                 id='dropdown-statistics',
                 options=dropdown_options,
+		placeholder='Select a report type',
                 value='Select Statistics'
             )
         ]),
