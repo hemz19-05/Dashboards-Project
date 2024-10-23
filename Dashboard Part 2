@@ -1,3 +1,4 @@
+
 import dash
 import more_itertools
 from dash import dcc
@@ -26,32 +27,28 @@ dropdown_options = [
 year_list = [i for i in range(1980, 2024, 1)]
 #---------------------------------------------------------------------------------------
 # Create the layout of the app
-app.layout = html.Div(children=[
-    #TASK 2.1 Add title to the dashboard
-    html.H1('Automobile Sales Statistics Dashboard',
-    style={'textAlign': 'center', 'color': '#503D36','font-size': 24}),#Include style for title
-    #TASK 2.2: Add two dropdown menus
-    html.Div([
-        html.Label('Select Statistics:'),
-        dcc.Dropdown(
-            id='dropdown-statistics',
-            options=[{'label':'Yearly Statistics', 'value':'Yearly Statistics'},
-            {'label':'Recession Period Statistics', 'value':'Recession Period Statistics'}],
-            value='Select Statistics',
-            placeholder='Select a report type',
-            style={'text-align-last':'center', 'font-size':20, 'width':'80%', 'padding':'3px'})
-])
-    ]),
-    html.Div(
-        dcc.Dropdown(
-            id='select-year',
-            options=[{'label': i, 'value': i} for i in year_list],
-            value='Select-year',
-	    placeholder='Select-year'
-        )),
-        html.Div([#TASK 2.3: Add a division for output display
-        html.Div(id='output-container', className='chart-grid', style={'display':'flex'}),])
 
+app.layout = html.Div([
+        html.H1("Automobile Statistics Dashboard",
+        style={'textAlign': 'center', 'color': '#503D36','font-size': 24}),
+        html.Div([
+            html.Label("Select Statistics:"),
+            dcc.Dropdown(
+                id='dropdown-statistics',
+                options=dropdown_options,
+                value='Select Statistics'
+            )
+        ]),
+        html.Div(dcc.Dropdown(
+                id='select-year',
+                options=[{'label': i, 'value': i} for i in year_list],
+                value='Select-year'
+            )),
+        
+        html.Div([
+        html.Div(id='output-container', className='chart-grid', style={'display': 'flex'}),
+        ])
+    ])
 #TASK 2.4: Creating Callbacks
 # Define the callback function to update the input container based on the selected statistics
 @app.callback(
@@ -169,15 +166,15 @@ def update_output_container(selected_statistics, graphplot):
         exp_data=yearly_data.groupby('Vehicle_Type')['Advertising_Expenditure'].sum()
         Y_chart4 = dcc.Graph(
             figure=px.pie(exp_data,
-            values='Advertising_Expenditure'
-            names='Vehicle_Type'
+            values='Advertising_Expenditure',
+            names='Vehicle_Type',
             title='Total Advertisement Expenditure by Vehicle'))
 
 #TASK 2.6: Returning the graphs for displaying Yearly data
         return [
                 html.Div(className='chart-item', children=[html.Div(children=Y_chart1),html.Div(children=Y_chart2)],style={'display':'flex'}),
                 html.Div(className='chart-item', children=[html.Div(children=Y_chart3),html.Div(children=Y_chart4)],style={'display': 'flex'})
-                
+                ]   
         
     else:
         return None
