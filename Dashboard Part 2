@@ -34,16 +34,19 @@ app.layout = html.Div([
             dcc.Dropdown(
                 id='dropdown-statistics',
                 options=dropdown_options,
-		placeholder='Select a report type',
+		        placeholder='Select a report type',
                 value='Select Statistics'
             )
         ]),
-        html.Div(dcc.Dropdown(
+        html.Div([
+            html.Label('Select Year'),
+            dcc.Dropdown(
                 id='select-year',
                 options=[{'label': i, 'value': i} for i in year_list],
-		placeholder='Select-year',
+		        placeholder='Select-year',
                 value='Select-year'
-            )),
+            )
+        ]),
         
         html.Div([
         html.Div(id='output-container', className='chart-grid', style={'display': 'flex'}),
